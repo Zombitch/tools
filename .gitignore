@@ -1,0 +1,47 @@
+# compiled output
+./back/dist
+./back/node_modules
+./back/data
+
+./front/dist
+./front/node_modules
+
+# Logs
+./back/logs
+./back/*.log
+./back/npm-debug.log*
+./back/pnpm-debug.log*
+./back/yarn-debug.log*
+./back/yarn-error.log*
+./back/lerna-debug.log*
+
+./front/logs
+./front/*.log
+./front/npm-debug.log*
+./front/pnpm-debug.log*
+./front/yarn-debug.log*
+./front/yarn-error.log*
+./front/lerna-debug.log*
+
+# OS
+./back/.DS_Store
+
+# Tests
+./back/coverage
+./back/.nyc_output
+
+# IDEs and editors
+.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
