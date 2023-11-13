@@ -1,7 +1,7 @@
 # compiled output
-./back/dist
-./back/node_modules
-./back/data
+/back/dist
+/back/node_modules
+/back/data
 
 ./front/dist
 ./front/node_modules
