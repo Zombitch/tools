@@ -2,15 +2,15 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import { Logger } from '@nestjs/common';
-import { access, appendFile, constants, mkdir } from 'node:fs/promises';
+import { access, appendFile, constants, mkdir, writeFile } from 'node:fs/promises';
 import { SystemService } from './core/system/system.service';
-const { join } = require('node:path');
+import { open, close } from 'node:fs';
 
 const logger = new Logger("main.ts");
 
 async function bootstrap() {
   // First of all , init data
-  await initData();
+  await initData(); 
 
   const port = 4000;
   //const allowlist = ['*'];
@@ -45,15 +45,18 @@ async function initData(){
   // For each entity, check if the database file exists, if not then create it
   dbEntities.forEach(async entity => {
     const fullpath = dataDir + entity;
-    try{
-      await access(fullpath, constants.F_OK);
-    } catch {
-      logger.log(entity + " does not exist. Database entity is being created");
-      try{
-        appendFile(fullpath, "[]").catch((err) => logger.error(err));
-      } catch{
-        logger.error("Error occured while creating database file for : " + fullpath);
+
+    await open(fullpath, 'wx', async (err, fd) => {
+      if (err && err.code === 'EEXIST') {
+        return;
       }
-    } 
-  }) 
+    
+      try {
+        logger.log("Data " + entity + " does not exist and is being created");
+        await appendFile(fullpath, "[]");
+      } finally {
+        close(fd, (err) => { if (err) throw err; });
+      }
+    });
+  })
 }

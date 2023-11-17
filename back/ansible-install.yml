@@ -1,0 +1,67 @@
+- hosts: localhost
+  become: yes
+  tasks:
+
+  - name: Create navsii/tools data folder
+    file:
+      path: /data/navsii-tools/docker
+      state: directory
+
+  - name: Create navsii/tools volume
+    community.docker.docker_volume:
+      name: navsii_tools_data
+
+  - name: Delete Dockerfile
+    file:
+      path: /data/navsii-tools/docker/Dockerfile
+      state: absent
+
+  - name: Write docker file
+    ansible.builtin.blockinfile:
+      path: /data/navsii-tools/docker/Dockerfile
+      create: true
+      mode: a+rwx
+      block: |
+        FROM node:21-alpine3.17
+        RUN apk update
+        RUN apk add wget
+        RUN mkdir -p /opt/navsii-tools
+        WORKDIR /opt/navsii-tools/
+        RUN wget https://github.com/Zombitch/tools/archive/refs/heads/main.zip
+        RUN unzip main.zip && rm -f main.zip
+        WORKDIR /opt/navsii-tools/tools-main/back
+        RUN sed -i '/jwtSecret:/c\jwtSecret: "jidyisocif9.56DYT6fdgJIQDHcd",' ./src/constants.ts
+        RUN sed -i '/cryptKey:/c\cryptKey: "jkhgfd444..bhdyhdHFGHDSGFBV5",' ./src/constants.ts
+        RUN npm install -g @nestjs/cli
+        RUN npm i
+        EXPOSE 4000
+        CMD ["npm","start"]
+      state: present
+
+  - name: Delete previous image
+    community.docker.docker_image:
+      name: navsii/tools
+      state: absent
+      force_absent: true
+
+  - name: Create the image
+    community.docker.docker_image:
+      name: navsii/tools
+      source: build
+      build: 
+        path: /data/navsii-tools/docker
+
+  - name: Run navssi/tools container
+    community.docker.docker_container:
+      container_default_behavior: no_defaults
+      name: navsii-tools
+      image: navsii/tools
+      hostname: navsii_api_tools_host
+      state: started
+      restart_policy: always
+      exposed_ports :
+        - 4000
+      volumes:
+        - navsii_tools_data:/opt/navsii-tools/data
+      networks:
+        - name: "{{ network }}"
