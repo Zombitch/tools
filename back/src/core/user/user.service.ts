@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DataService } from '../abstract/data.service';
 
 @Injectable()
-export class UsersService extends DataService{
+export class UserService extends DataService{
 
     constructor() {
         super();

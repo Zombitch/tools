@@ -1,13 +1,13 @@
 import { Controller, Get, OnModuleInit } from '@nestjs/common';
 import { AppService } from './app.service';
-import { UsersService } from './core/users/users.service';
+import { UserService } from './core/user/user.service';
 
 @Controller()
 export class AppController implements OnModuleInit{
 
   constructor(
     private readonly appService: AppService,
-    private readonly usersService: UsersService
+    private readonly usersService: UserService
   ) {
 
   }

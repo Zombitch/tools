@@ -8,6 +8,7 @@ import { Logger } from '@nestjs/common';
 @Injectable()
 export class DataService {
     private readonly logger = new Logger(DataService.name);
+    private lock: boolean = false;
     protected databaseFilename: string = "";
     protected dataDir: string = join(__dirname, '..', 'data/');
     protected data: DataElement[] = [];
@@ -30,6 +31,20 @@ export class DataService {
             this.data = JSON.parse(contents);
             return this.data;
         }
+    }
+
+    /**
+     * Clear and remove data from memory
+     */
+    public clear(): void{
+        this.data = [];
+    }
+
+    /**
+     * Create a backup
+     */
+    public backup(): void{
+        writeFile(this.getFilepath()+".backup", JSON.stringify(this.data), { encoding: 'utf8' });
     }
 
     /**
@@ -56,9 +71,10 @@ export class DataService {
      * @returns 
      */
     public async insert(newData: DataElement, save: boolean = true): Promise<void> {
-        //Check if user exists (if it already has an id) before creating a new one
-        if(newData.id) this.logger.debug("Existing user cannot be created");
-        else{
+        //Check if data exists (if it already has an id) before creating a new one
+        if(newData.id) this.logger.debug("Existing data cannot be created");
+        else if(!this.lock){
+            this.lock = true;
             if(this.data.length > 0){
                 this.data.sort((a, b) => a.id - b.id);
                 newData.id = (this.data[this.data.length-1].id) + 1;
@@ -67,6 +83,9 @@ export class DataService {
             }
             this.data.push(newData);
             if(save) await this.saveAsJson(this.data);
+            this.lock = false;
+        }else{
+            this.logger.debug("Data locked. The database is being processed and cannot manage new operation at the moment.");
         }
     }
 
@@ -78,7 +97,7 @@ export class DataService {
     public async upsert(newData: DataElement, save: boolean = true): Promise<void> {
         let existingData: User = await this.findOneBy(newData.id);
 
-        // If user exists update it, otherwise create it
+        // If data exists update it, otherwise create it
         if(existingData){
             const dataId: number = existingData.id;
             existingData = newData;

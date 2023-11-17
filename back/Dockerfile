@@ -14,5 +14,6 @@ RUN npm run start:dev
 RUN npm i --save helmet
 RUN npm install -g @nestjs/cli
 RUN npm i --save @nestjs/config
+RUN npm i --save @nestjs/jwt
 
 EXPOSE 4000

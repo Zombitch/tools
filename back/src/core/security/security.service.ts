@@ -1,24 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { createCipheriv, createDecipheriv, randomBytes, scrypt } from 'crypto';
 import * as bcrypt from 'bcrypt';
+import { AppConfig } from 'src/constants';
+import { promisify } from 'util';
 
 @Injectable()
 export class SecurityService {
+     private readonly iv: Buffer = randomBytes(16);
+     private key: Buffer = null;
 
     /**
      * Encrypt a string
      * @param text String that will be process to be encrypted
-     * @param iv Buffer randomBytes(x)
      * @param key Buffer representing key to secure the encryption method
      * @returns Promise with buffer (encrypted data) as parameter
      */
-    async encrypt(text: string, iv: Buffer, key: Buffer): Promise<Buffer>{
-        //const iv = randomBytes(16);
-        //const key = (await promisify(scrypt)(text, 'salt', 32)) as Buffer;
+    async encrypt(text: string): Promise<Buffer>{
+        if(!this.key) this.key = (await promisify(scrypt)(AppConfig.cryptKey, 'salt', 32)) as Buffer;
 
-        const cipher = createCipheriv('aes-256-ctr', key, iv);
+        const cipher = createCipheriv('aes-256-ctr', this.key, this.iv);
         
-        const textToEncrypt = 'Nest';
+        const textToEncrypt = text;
         return Buffer.concat([
           cipher.update(textToEncrypt),
           cipher.final(),
@@ -28,12 +30,12 @@ export class SecurityService {
     /**
      * Decrypt a value
      * @param Decrypt a string 
-     * @param iv Buffer randomBytes(x)
      * @param key Buffer representing key to secure the encryption method
      * @returns Buffer decrypted password
      */
-    decrypt(encryptedText: Buffer, iv: Buffer, key: Buffer): Buffer{
-        const decipher = createDecipheriv('aes-256-ctr', key, iv);
+    async decrypt(encryptedText: Buffer): Promise<Buffer>{
+        if(!this.key) this.key = (await promisify(scrypt)(AppConfig.cryptKey, 'salt', 32)) as Buffer;
+        const decipher = createDecipheriv('aes-256-ctr', this.key, this.iv);
         return Buffer.concat([
             decipher.update(encryptedText),
             decipher.final(),
@@ -59,5 +61,15 @@ export class SecurityService {
      */
     isTextEqualToHash(text: string, hash: string): Promise<boolean>{
         return bcrypt.compare(text, hash);
+    }
+
+    b64Encode(value: string, loop: number = 1): string{
+        if(loop === 0) return value;
+        else return this.b64Encode(btoa(value), --loop);
+    }
+
+    b64Decode(value: string, loop: number = 1): string{
+        if(loop === 0) return value;
+        else return this.b64Decode(atob(value), --loop);
     }
 }
