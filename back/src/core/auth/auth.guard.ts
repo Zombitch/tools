@@ -49,4 +49,4 @@ import { SecurityService } from '../security/security.service';
   }
   
 export const IS_PUBLIC_KEY = 'isPublic';
-export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
+export const AllowAnonymous = () => SetMetadata(IS_PUBLIC_KEY, true);

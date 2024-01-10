@@ -2,23 +2,29 @@
   become: yes
   tasks:
 
+  - name: Remove a container
+    docker_container:
+      name: navsii-api-tools
+      keep_volumes: true
+      state: absent
+
   - name: Create navsii/tools data folder
     file:
-      path: /data/navsii-tools/docker
+      path: /data/navsii-api-tools/docker
       state: directory
 
   - name: Create navsii/tools volume
     community.docker.docker_volume:
-      name: navsii_tools_data
+      name: navsii_api_tools_data
 
   - name: Delete Dockerfile
     file:
-      path: /data/navsii-tools/docker/Dockerfile
+      path: /data/navsii-api-tools/docker/Dockerfile
       state: absent
 
   - name: Write docker file
     ansible.builtin.blockinfile:
-      path: /data/navsii-tools/docker/Dockerfile
+      path: /data/navsii-api-tools/docker/Dockerfile
       create: true
       mode: a+rwx
       block: |
@@ -30,8 +36,8 @@
         RUN wget https://github.com/Zombitch/tools/archive/refs/heads/main.zip
         RUN unzip main.zip && rm -f main.zip
         WORKDIR /opt/navsii-tools/tools-main/back
-        RUN sed -i '/jwtSecret:/c\jwtSecret: "jidyisocif9.56DYT6fdgJIQDHcd",' ./src/constants.ts
-        RUN sed -i '/cryptKey:/c\cryptKey: "jkhgfd444..bhdyhdHFGHDSGFBV5",' ./src/constants.ts
+        RUN sed -i '/jwtSecret:/c\jwtSecret: "{{ secret }}",' ./src/constants.ts
+        RUN sed -i '/cryptKey:/c\cryptKey: "{{ cryptKey }}",' ./src/constants.ts
         RUN npm install -g @nestjs/cli
         RUN npm i
         EXPOSE 4000
@@ -40,28 +46,28 @@
 
   - name: Delete previous image
     community.docker.docker_image:
-      name: navsii/tools
+      name: navsii/api-tools
       state: absent
       force_absent: true
 
   - name: Create the image
     community.docker.docker_image:
-      name: navsii/tools
+      name: navsii/api-tools
       source: build
-      build: 
-        path: /data/navsii-tools/docker
+      build:
+        path: /data/navsii-api-tools/docker
 
   - name: Run navssi/tools container
     community.docker.docker_container:
       container_default_behavior: no_defaults
-      name: navsii-tools
-      image: navsii/tools
+      name: navsii-api-tools
+      image: navsii/api-tools
       hostname: navsii_api_tools_host
       state: started
       restart_policy: always
       exposed_ports :
         - 4000
       volumes:
-        - navsii_tools_data:/opt/navsii-tools/data
+        - navsii_tools_data:/opt/navsii-tools/tools-main/back/data
       networks:
         - name: "{{ network }}"

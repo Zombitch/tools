@@ -7,10 +7,11 @@ import { SystemService } from './core/system/system.service';
 import { ConfigModule } from '@nestjs/config';
 import { UserController } from './core/user/user.controller';
 import { AuthModule } from './core/auth/auth.module';
+import { OpenAIController } from './ai/openai.controller';
 
 @Module({
   imports: [AuthModule, UsersModule, ConfigModule.forRoot({ignoreEnvFile: true})],
-  controllers: [AppController, UserController],
+  controllers: [AppController, UserController, OpenAIController],
   providers: [
     AppService, 
     SecurityService,

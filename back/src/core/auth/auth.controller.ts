@@ -1,6 +1,6 @@
 import { Controller, Body, Post, HttpCode, HttpStatus, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Public } from './auth.guard';
+import { AllowAnonymous } from './auth.guard';
 import { promisify } from 'util';
 import { scrypt } from 'crypto';
 
@@ -13,7 +13,7 @@ export class AuthController {
      * @param body
      * @returns 
      */
-    @Public()
+    @AllowAnonymous()
     @HttpCode(HttpStatus.OK)
     @Post('login')
     login(@Body() body: User) {
@@ -25,7 +25,7 @@ export class AuthController {
      * @param body
      * @returns 
      */
-    @Public()
+    @AllowAnonymous()
     @HttpCode(HttpStatus.OK)
     @Get('test/anonymous')
     async testAnonymous() {

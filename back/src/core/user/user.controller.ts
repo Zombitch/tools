@@ -1,6 +1,7 @@
 import { Controller, Body, Post, HttpCode, HttpStatus, BadRequestException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { SecurityService } from '../security/security.service';
+import { AllowAnonymous } from '../auth/auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -9,6 +10,7 @@ export class UserController {
         private securityService: SecurityService
     ) {}
 
+    @AllowAnonymous()
     @HttpCode(HttpStatus.OK)
     @Post()
     async create(@Body() body: Record<string, any>) {

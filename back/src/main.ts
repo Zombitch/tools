@@ -2,9 +2,12 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import { Logger } from '@nestjs/common';
-import { access, appendFile, constants, mkdir, writeFile } from 'node:fs/promises';
+import { appendFile, mkdir } from 'node:fs/promises';
 import { SystemService } from './core/system/system.service';
 import { open, close } from 'node:fs';
+import * as session from 'express-session';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+
 
 const logger = new Logger("main.ts");
 
@@ -13,22 +16,19 @@ async function bootstrap() {
   await initData(); 
 
   const port = 4000;
-  //const allowlist = ['*'];
-  const allowlist = ['https://dev.front.vinais.ovh', 'https://dev.back.vinais.ovh'];
   const app = await NestFactory.create(AppModule);
 
   app.use(helmet());
-  app.enableCors((req, callback) => {
-    let corsOptions = {};
-    
-    if (allowlist.indexOf(req.header('Origin')) !== -1 || allowlist[0] === '*') corsOptions = { origin: true };
-    else corsOptions = {origin: false};
-
-    callback(null, corsOptions);
-  });
+  app.use(
+    session({
+      secret: 'sdjYUFBDSnbdufs-8954-',
+      resave: false,
+      saveUninitialized: false,
+    }),
+  );
 
   await app.listen(port);
-  logger.log("Application started and listen to " + port) 
+  logger.log("Application started and listen to " + port);
 }
 bootstrap();
 
