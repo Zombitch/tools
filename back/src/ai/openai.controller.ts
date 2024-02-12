@@ -4,6 +4,7 @@ import { AllowAnonymous } from '../core/auth/auth.guard';
 import { OpenAI } from "openai";
 import { Thread } from 'openai/resources/beta/threads/threads';
 import { MessageCreateParams, ThreadMessage, ThreadMessagesPage } from 'openai/resources/beta/threads/messages/messages';
+import { AppConfig } from '../constants';
 
 @Controller('ai')
 export class OpenAIController {
@@ -12,6 +13,7 @@ export class OpenAIController {
     protected assistantID: string = "asst_1J56WUefvtFnveifVFSzTDOy";
 
     constructor(private authService: AuthService) {
+        this.key = AppConfig.openaiApiKey;
         this.openAI = new OpenAI({apiKey: this.key});
     }
 
