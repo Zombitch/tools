@@ -38,6 +38,7 @@
         WORKDIR /opt/navsii-tools/tools-main/back
         RUN sed -i '/jwtSecret:/c\jwtSecret: "{{ secret }}",' ./src/constants.ts
         RUN sed -i '/cryptKey:/c\cryptKey: "{{ cryptKey }}",' ./src/constants.ts
+        RUN sed -i '/openaiApiKey:/c\openaiApiKey: "{{ openaiApiKey }}",' ./src/constants.ts
         RUN npm install -g @nestjs/cli
         RUN npm i
         EXPOSE 4000
