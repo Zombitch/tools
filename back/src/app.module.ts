@@ -8,10 +8,11 @@ import { ConfigModule } from '@nestjs/config';
 import { UserController } from './core/user/user.controller';
 import { AuthModule } from './core/auth/auth.module';
 import { OpenAIController } from './ai/openai.controller';
+import { LostPhoneAIController } from './ai/lostphoneai.controller';
 
 @Module({
   imports: [AuthModule, UsersModule, ConfigModule.forRoot({ignoreEnvFile: true})],
-  controllers: [AppController, UserController, OpenAIController],
+  controllers: [AppController, UserController, OpenAIController, LostPhoneAIController],
   providers: [
     AppService, 
     SecurityService,

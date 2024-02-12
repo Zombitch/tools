@@ -7,9 +7,9 @@ import { MessageCreateParams, ThreadMessage, ThreadMessagesPage } from 'openai/r
 
 @Controller('ai')
 export class OpenAIController {
-    private openAI: OpenAI;
-    private key: string = "";
-    private assistantID: string = "";
+    protected openAI: OpenAI;
+    protected key: string = "";
+    protected assistantID: string = "asst_1J56WUefvtFnveifVFSzTDOy";
 
     constructor(private authService: AuthService) {
         this.openAI = new OpenAI({apiKey: this.key});
@@ -40,7 +40,7 @@ export class OpenAIController {
         return messages.data[0].content[0]["text"]["value"];
     }
 
-    private async createThread(threadID: string|undefined ,inputText: string): Promise<string>{
+    protected async createThread(threadID: string|undefined ,inputText: string): Promise<string>{
         let message: MessageCreateParams = {"role": "user", "content": inputText};
         if(!threadID){
             const thread: Thread = await this.openAI.beta.threads.create({ messages: [ message] });
@@ -51,8 +51,8 @@ export class OpenAIController {
         return threadID;
     }
 
-    private async waitForComplete(threadID: string, runID: string){
-        await new Promise(resolve => setTimeout(resolve, 7000));
+    protected async waitForComplete(threadID: string, runID: string){
+        await new Promise(resolve => setTimeout(resolve, 7500));
         const run = await this.openAI.beta.threads.runs.retrieve(threadID, runID);
 
         if(['QUEUED', 'IN_PROGRESS'].includes(run.status.toUpperCase())){

@@ -17,6 +17,7 @@ async function bootstrap() {
 
   const port = 4000;
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
 
   app.use(helmet());
   app.use(
