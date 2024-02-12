@@ -54,7 +54,7 @@ export class OpenAIController {
     }
 
     protected async waitForComplete(threadID: string, runID: string){
-        await new Promise(resolve => setTimeout(resolve, 7500));
+        await new Promise(resolve => setTimeout(resolve, AppConfig.openaiCheckInterval));
         const run = await this.openAI.beta.threads.runs.retrieve(threadID, runID);
 
         if(['QUEUED', 'IN_PROGRESS'].includes(run.status.toUpperCase())){
