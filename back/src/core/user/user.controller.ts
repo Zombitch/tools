@@ -20,6 +20,7 @@ export class UserController {
             password: await this.securityService.hash(body.password),
             email: body?.email
         }
+        
         this.userService.insert(user, true);
     }
 }

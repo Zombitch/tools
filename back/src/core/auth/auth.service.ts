@@ -27,6 +27,5 @@ export class AuthService {
         const accessToken = await this.jwtService.signAsync(payload);
         
         return { access_token: this.securityService.b64Encode(accessToken, AppConfig.encodingLoop) };
-
     }
 }
