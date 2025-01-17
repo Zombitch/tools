@@ -1,10 +1,10 @@
-import { Controller, Body, Post, HttpCode, HttpStatus, Get, Req, Param, Session } from '@nestjs/common';
+import { Controller, HttpCode, HttpStatus, Get, Req, Param, Session } from '@nestjs/common';
 import { AuthService } from 'src/core/auth/auth.service';
 import { AllowAnonymous } from '../core/auth/auth.guard';
 import { OpenAI } from "openai";
-import { Thread } from 'openai/resources/beta/threads/threads';
-import { MessageCreateParams, ThreadMessage, ThreadMessagesPage } from 'openai/resources/beta/threads/messages/messages';
 import { AppConfig } from '../constants';
+import { Thread } from 'openai/resources/beta/threads/threads';
+import { MessageCreateParams, Message, MessagesPage } from 'openai/resources/beta/threads/messages';
 
 @Controller('ai')
 export class OpenAIController {
@@ -37,7 +37,7 @@ export class OpenAIController {
         await this.waitForComplete(createdThread, run.id);
 
         // Retrieve messages
-        const messages: ThreadMessage | ThreadMessagesPage = await this.openAI.beta.threads.messages.list(createdThread);
+        const messages: Message | MessagesPage = await this.openAI.beta.threads.messages.list(createdThread);
 
         return messages.data[0].content[0]["text"]["value"];
     }

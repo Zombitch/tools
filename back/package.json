@@ -30,7 +30,7 @@
     "express-session": "^1.17.3",
     "helmet": "^7.1.0",
     "kafkajs": "^2.2.4",
-    "openai": "^4.24.3",
+    "openai": "^4.79.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1"
   },

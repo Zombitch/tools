@@ -1,6 +1,6 @@
 import { Controller, HttpCode, HttpStatus, Get, Req, Param, Session } from '@nestjs/common';
 import { AllowAnonymous } from '../core/auth/auth.guard';
-import { ThreadMessage, ThreadMessagesPage } from 'openai/resources/beta/threads/messages/messages';
+import { Message, MessagesPage } from 'openai/resources/beta/threads/messages';
 import { OpenAIController } from './openai.controller';
 
 @Controller('lostphoneai')
@@ -23,7 +23,7 @@ export class LostPhoneAIController extends OpenAIController {
         await this.waitForComplete(threadID, run.id);
 
         // Retrieve messages
-        const messages: ThreadMessage | ThreadMessagesPage = await this.openAI.beta.threads.messages.list(threadID);
+        const messages: Message | MessagesPage = await this.openAI.beta.threads.messages.list(threadID);
 
         return {
             "threadID": threadID,
