@@ -1,0 +1,47 @@
+/* You can add global styles to this file, and also import other style files */
+$spacer: 1rem;
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.center{
+  text-align: center;
+}
+
+// Size
+$sizePct: (25, 33, 50, 66, 75, 100);
+@for $i from 1 through 6{
+  $pct: nth($sizePct, $i);
+  .w-#{$pct} {width: 1% * $pct;}
+}
+
+.m-auto{ margin: auto;}
+$spaceFactorValues: (0, 0.25, 0.5, 1, 1.5, 3, 4.5, 6);
+@for $i from 1 through 8{
+  $value: $i - 1;
+  .mt-#{$value} { margin-top: $spacer * nth($spaceFactorValues, $i); }
+  .mb-#{$value} { margin-bottom: $spacer * nth($spaceFactorValues, $i); }
+  .ml-#{$value} { margin-left: $spacer * nth($spaceFactorValues, $i); }
+  .mr-#{$value} { margin-right: $spacer * nth($spaceFactorValues, $i); }
+  .mx-#{$value} { 
+    margin-right: $spacer * nth($spaceFactorValues, $i); 
+    margin-left: $spacer * nth($spaceFactorValues, $i); 
+  }
+  .my-#{$value} { 
+    margin-top: $spacer * nth($spaceFactorValues, $i); 
+    margin-bottom: $spacer * nth($spaceFactorValues, $i); 
+  }
+
+  .pt-#{$value} { padding-top: $spacer * nth($spaceFactorValues, $i); }
+  .pb-#{$value} { padding-bottom: $spacer * nth($spaceFactorValues, $i); }
+  .pl-#{$value} { padding-left: $spacer * nth($spaceFactorValues, $i); }
+  .pr-#{$value} { padding-right: $spacer * nth($spaceFactorValues, $i); }
+  .px-#{$value} { 
+    padding-right: $spacer * nth($spaceFactorValues, $i); 
+    padding-left: $spacer * nth($spaceFactorValues, $i); 
+  }
+  .py-#{$value} { 
+    padding-top: $spacer * nth($spaceFactorValues, $i); 
+    padding-bottom: $spacer * nth($spaceFactorValues, $i); 
+  }
+}
