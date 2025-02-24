@@ -7,8 +7,8 @@ import { Logger } from '@nestjs/common';
 
 @Injectable()
 export class DataService {
-    private readonly logger = new Logger(DataService.name);
-    private lock: boolean = false;
+    protected readonly logger = new Logger(DataService.name);
+    protected lock: boolean = false;
     protected databaseFilename: string = "";
     protected dataDir: string = join(__dirname, '..', 'data/');
     protected data: DataElement[] = [];
@@ -90,12 +90,13 @@ export class DataService {
     }
 
     /**
-     * Upsert a user
-     * @param username 
+     * Upsert a data
+     * @param dataElement
+     * @param save 
      * @returns 
      */
     public async upsert(newData: DataElement, save: boolean = true): Promise<void> {
-        let existingData: User = await this.findOneBy(newData.id);
+        let existingData: DataElement = await this.findOneBy(newData.id);
 
         // If data exists update it, otherwise create it
         if(existingData){
