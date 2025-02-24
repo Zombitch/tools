@@ -6,7 +6,7 @@ import { appendFile, mkdir } from 'node:fs/promises';
 import { SystemService } from './core/system/system.service';
 import { open, close } from 'node:fs';
 import * as session from 'express-session';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { ApiKeyMiddleware } from './core/security/apikey.middleware';
 
 
 const logger = new Logger("main.ts");
@@ -27,6 +27,8 @@ async function bootstrap() {
       saveUninitialized: false,
     }),
   );
+
+  app.use(new ApiKeyMiddleware().use);
 
   await app.listen(port);
   logger.log("Application started and listen to " + port);
