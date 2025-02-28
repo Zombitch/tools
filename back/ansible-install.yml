@@ -28,7 +28,7 @@
       create: true
       mode: a+rwx
       block: |
-        FROM node:21-alpine3.17
+        FROM node:22.14-alpine3.21
         RUN apk update
         RUN apk add wget
         RUN mkdir -p /opt/navsii-tools
