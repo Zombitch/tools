@@ -6,7 +6,8 @@ import { appendFile, mkdir } from 'node:fs/promises';
 import { SystemService } from './core/system/system.service';
 import { open, close } from 'node:fs';
 import * as session from 'express-session';
-import { ApiKeyMiddleware } from './core/security/apikey.middleware';
+import { AccessControlMiddleware } from './core/security/accesscontrol.middleware';
+import { AppConfig } from 'assets/constants';
 
 
 const logger = new Logger("main.ts");
@@ -18,7 +19,7 @@ async function bootstrap() {
   const port = 4000;
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    "origin": ["https://dev.front.vinais.ovh", "https://closjarjart.fr", "https://www.closjarjart.fr"],
+    "origin": AppConfig.allowOrigin,
     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
     "preflightContinue": false,
     "optionsSuccessStatus": 204
@@ -33,7 +34,7 @@ async function bootstrap() {
     }),
   );
 
-  app.use(new ApiKeyMiddleware().use);
+  app.use(new AccessControlMiddleware().use);
 
   await app.listen(port);
   logger.log("Application started and listen to " + port);

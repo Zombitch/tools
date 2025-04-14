@@ -15,7 +15,7 @@ export class AuthService {
 
     async login(username: string, password: string){
         const user = await this.userService.findOneBy(username, "username");
-        const isPasswordCorrect = await this.securityService.isTextEqualToHash(password, user.password);
+        const isPasswordCorrect = await this.securityService.isTextEqualToHash(password, user?.password);
 
         if (!isPasswordCorrect) throw new UnauthorizedException();
 

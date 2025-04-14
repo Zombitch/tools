@@ -8,6 +8,7 @@ export const AppConfig = {
   openaiCheckInterval: 1.5,
   mongoPassword: "45125sszed?qZAEF",
   smtpUser: "maxime.vinais.fb@gmail.com",
-  smtpPwd: "prxr pedf wdpp qfqm"
+  smtpPwd: "prxr pedf wdpp qfqm",
+  allowOrigin: ["https://dev.front.vinais.ovh", "https://closjarjart.fr", "https://www.closjarjart.fr", "https://monopevasion.fr", "https://www.monopevasion.fr"]
 };
   

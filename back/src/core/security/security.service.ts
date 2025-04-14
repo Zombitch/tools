@@ -60,7 +60,7 @@ export class SecurityService {
      * @returns 
      */
     isTextEqualToHash(text: string, hash: string): Promise<boolean>{
-        return bcrypt.compare(text.toString(), hash.toString());
+        return text && hash && bcrypt.compare(text.toString(), hash.toString());
     }
 
     b64Encode(value: string, loop: number = 1): string{
