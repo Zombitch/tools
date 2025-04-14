@@ -17,7 +17,12 @@ async function bootstrap() {
 
   const port = 4000;
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  app.enableCors({
+    "origin": ["https://dev.front.vinais.ovh", "https://closjarjart.fr", "https://www.closjarjart.fr"],
+    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+    "preflightContinue": false,
+    "optionsSuccessStatus": 204
+  });
 
   app.use(helmet());
   app.use(
