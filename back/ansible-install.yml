@@ -36,9 +36,13 @@
         RUN wget https://github.com/Zombitch/tools/archive/refs/heads/main.zip
         RUN unzip main.zip && rm -f main.zip
         WORKDIR /opt/navsii-tools/tools-main/back
-        RUN sed -i '/jwtSecret:/c\jwtSecret: "{{ secret }}",' ./src/constants.ts
-        RUN sed -i '/cryptKey:/c\cryptKey: "{{ cryptKey }}",' ./src/constants.ts
-        RUN sed -i '/openaiApiKey:/c\openaiApiKey: "{{ openaiApiKey }}",' ./src/constants.ts
+        RUN sed -i '/jwtSecret:/c\jwtSecret: "{{ secret }}",' ./assets/constants.ts
+        RUN sed -i '/cryptKey:/c\cryptKey: "{{ cryptKey }}",' ./assets/constants.ts
+        RUN sed -i '/smtpUser:/c\smtpUser: "{{ smtpUser }}",' ./assets/constants.ts
+        RUN sed -i '/smtpPwd:/c\smtpPwd: "{{ smtpPassword }}",' ./assets/constants.ts
+        RUN sed -i '/apiKey:/c\apiKey: "{{ apiKey }}",' ./assets/constants.ts
+        RUN sed -i '/mongoPassword:/c\mongoPassword: "{{ mongoPassword }}",' ./assets/constants.ts
+        RUN sed -i '/openaiApiKey:/c\openaiApiKey: "{{ openaiApiKey }}",' ./assets/constants.ts
         RUN npm install -g @nestjs/cli
         RUN npm i
         EXPOSE 4000

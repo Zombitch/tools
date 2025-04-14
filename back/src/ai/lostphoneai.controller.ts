@@ -14,7 +14,7 @@ export class LostPhoneAIController extends OpenAIController {
      */
     @AllowAnonymous()
     @HttpCode(HttpStatus.OK)
-    @Get('talk/:text/:threadID?')
+    //@Get('talk/:text/:threadID?')
     async talk(@Param() params: any) {
         const threadID: string = await this.createThread(params.threadID, params.text);
         const run = await this.openAI.beta.threads.runs.create(threadID, { assistant_id: this.assistantID });

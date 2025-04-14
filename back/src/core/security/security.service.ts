@@ -49,7 +49,7 @@ export class SecurityService {
      */
     async hash(text: string): Promise<any>{
         const saltOrRounds = 10;
-        const hash = await bcrypt.hash(text, saltOrRounds);
+        const hash = await bcrypt.hash(text.toString(), saltOrRounds);
         return hash;
     }
 
@@ -60,7 +60,7 @@ export class SecurityService {
      * @returns 
      */
     isTextEqualToHash(text: string, hash: string): Promise<boolean>{
-        return bcrypt.compare(text, hash);
+        return bcrypt.compare(text.toString(), hash.toString());
     }
 
     b64Encode(value: string, loop: number = 1): string{

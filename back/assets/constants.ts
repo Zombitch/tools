@@ -6,6 +6,8 @@ export const AppConfig = {
   apiKey: "***Repl4ceValueApiKeyForPr0dEnv.***",
   openaiApiKey: "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",
   openaiCheckInterval: 1.5,
-  mongoPassword: "45125sszed?qZAEF"
+  mongoPassword: "45125sszed?qZAEF",
+  smtpUser: "maxime.vinais.fb@gmail.com",
+  smtpPwd: "prxr pedf wdpp qfqm"
 };
   
