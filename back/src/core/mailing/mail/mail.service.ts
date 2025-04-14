@@ -10,6 +10,7 @@ export class MailService {
   async sendMail(from: string, to: string, subject: string, text: string = "", html: string = "") {
     const mailOptions = {
       from: from,
+      replyTo: from,
       to: to,
       subject: subject,
       text: text,
