@@ -2,7 +2,7 @@ import { Controller, HttpCode, HttpStatus, Get, Req, Param, Session } from '@nes
 import { AuthService } from 'src/core/auth/auth.service';
 import { AllowAnonymous } from '../core/auth/auth.guard';
 import { OpenAI } from "openai";
-import { AppConfig } from '../constants';
+import { AppConfig } from '../../assets/constants';
 import { Thread } from 'openai/resources/beta/threads/threads';
 import { MessageCreateParams, Message, MessagesPage } from 'openai/resources/beta/threads/messages';
 

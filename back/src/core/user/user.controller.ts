@@ -18,7 +18,7 @@ export class UserController {
         let user: User = {
             username: body.username.toString(),
             password: await this.securityService.hash(body.password.toString()),
-            email: body?.email.toString()
+            email: body?.email?.toString()
         }
 
         const usernameDoesExist = await this.userService.findOneBy(body.username, "username");

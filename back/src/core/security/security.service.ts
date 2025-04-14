@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { createCipheriv, createDecipheriv, randomBytes, scrypt } from 'crypto';
 import * as bcrypt from 'bcrypt';
-import { AppConfig } from 'src/constants';
+import { AppConfig } from 'assets/constants';
 import { promisify } from 'util';
 
 @Injectable()

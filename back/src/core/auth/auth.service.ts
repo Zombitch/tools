@@ -3,7 +3,7 @@ import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { SecurityService } from '../security/security.service';
 import { access } from 'fs';
-import { AppConfig } from 'src/constants';
+import { AppConfig } from 'assets/constants';
 
 @Injectable()
 export class AuthService {
