@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
-const { join } = require('node:path');
-import { readFile, writeFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { DataElement } from './data-element';
 import { SystemService } from '../system/system.service';
 import { Logger } from '@nestjs/common';
 import { DataService } from './data.service';
@@ -23,7 +21,7 @@ export class MongoService extends DataService {
      * @param force Force to reload data
      */
     public async load(force: boolean = false): Promise<{}>{
-        return;
+        return {};
     }
 
     /**
@@ -39,7 +37,7 @@ export class MongoService extends DataService {
      * @returns 
      */
     public saveAsJson(dataToSave: {}): Promise<void>{
-        return;
+        return new Promise(() => {});
     }
 
     /**
@@ -47,7 +45,7 @@ export class MongoService extends DataService {
      * @param username 
      * @returns 
      */
-    public async findOneBy(valueToLookFor: string|number, field: string = "id"): Promise<DataElement | undefined> {
+    public async findOneBy(valueToLookFor: string|number|undefined, field: string = "id"): Promise<DataElement | undefined> {
         return;
     }
 
@@ -66,7 +64,7 @@ export class MongoService extends DataService {
      * @returns 
      */
     public async upsert(newData: DataElement, save: boolean = true): Promise<void> {
-        let existingData: DataElement = await this.findOneBy(newData.id);
+        let existingData: DataElement | undefined = await this.findOneBy(newData.id);
 
         // If data exists update it, otherwise create it
         if(existingData){

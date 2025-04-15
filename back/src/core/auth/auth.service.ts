@@ -1,9 +1,7 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { SecurityService } from '../security/security.service';
-import { access } from 'fs';
-import { AppConfig } from 'assets/constants';
 
 @Injectable()
 export class AuthService {
@@ -13,19 +11,22 @@ export class AuthService {
         private jwtService: JwtService,
         private securityService: SecurityService) {}
 
-    async login(username: string, password: string){
+    async login(username: string | undefined, password: string | undefined){
+        if(!username || !password) throw new BadRequestException("Missing parameters");
+
         const user = await this.userService.findOneBy(username, "username");
         const isPasswordCorrect = await this.securityService.isTextEqualToHash(password, user?.password);
 
         if (!isPasswordCorrect) throw new UnauthorizedException();
 
         const payload = { 
-            userId: user.id, 
-            username: user.username,
+            userId: user?.id, 
+            username: user?.username,
             date: new Date()
-         };
-        const accessToken = await this.jwtService.signAsync(payload);
+        };
         
-        return { access_token: this.securityService.b64Encode(accessToken, AppConfig.encodingLoop) };
+        console.log(process.env.jwtSecret)
+        const accessToken = await this.jwtService.signAsync(payload);
+        return { access_token: this.securityService.b64Encode(accessToken, (process.env.encodingLoop as unknown as number)) };
     }
 }

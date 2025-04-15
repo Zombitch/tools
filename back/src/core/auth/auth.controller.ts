@@ -1,8 +1,7 @@
 import { Controller, Body, Post, HttpCode, HttpStatus, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AllowAnonymous } from './auth.guard';
-import { promisify } from 'util';
-import { scrypt } from 'crypto';
+import { User } from '../user/user'
 
 @Controller('auth')
 export class AuthController {

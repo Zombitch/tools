@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 const { join } = require('node:path');
 import { readFile, writeFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
 import { SystemService } from '../system/system.service';
 import { Logger } from '@nestjs/common';
+import { DataElement } from './data-element'
 
 @Injectable()
 export class DataService {
@@ -25,11 +25,13 @@ export class DataService {
      * Load users data in server memory
      * @param force Force to reload data
      */
-    public async load(force: boolean = false): Promise<{}>{
+    public async load(force: boolean = false): Promise<{} | undefined> {
         if(this.databaseFilename && (this.data.length === 0 || force)){
             const contents = await readFile(this.getFilepath(), { encoding: 'utf8' });
-            this.data = JSON.parse(contents);
-            return this.data;
+            if(contents && contents.length > 0){
+                this.data = JSON.parse(contents);
+                return this.data;
+            }            
         }
     }
 
@@ -76,8 +78,8 @@ export class DataService {
         else if(!this.lock){
             this.lock = true;
             if(this.data.length > 0){
-                this.data.sort((a, b) => a.id - b.id);
-                newData.id = (this.data[this.data.length-1].id) + 1;
+                this.data.sort((a, b) => a.id && b.id ? a.id - b.id : 0);
+                newData.id = ((this.data[this.data.length-1].id) ?? 0) + 1;
             }else{
                 newData.id = 0;
             }
@@ -96,18 +98,20 @@ export class DataService {
      * @returns 
      */
     public async upsert(newData: DataElement, save: boolean = true): Promise<void> {
-        let existingData: DataElement = await this.findOneBy(newData.id);
+        if(newData?.id){
+            let existingData: DataElement | undefined = await this.findOneBy(newData.id);
 
-        // If data exists update it, otherwise create it
-        if(existingData){
-            const dataId: number = existingData.id;
-            existingData = newData;
-            existingData.id = dataId;
-        }
-        else{
-            this.data.push(newData);
-        }
+            // If data exists update it, otherwise create it
+            if(existingData && existingData.id){
+                const dataId: number = existingData.id;
+                existingData = newData;
+                existingData.id = dataId;
+            }
+            else{
+                this.data.push(newData);
+            }
 
-        if(save) await this.saveAsJson(this.data);
+            if(save) await this.saveAsJson(this.data);
+        }
     }
 }

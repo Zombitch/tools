@@ -7,8 +7,7 @@ import { SystemService } from './core/system/system.service';
 import { open, close } from 'node:fs';
 import * as session from 'express-session';
 import { AccessControlMiddleware } from './core/security/accesscontrol.middleware';
-import { AppConfig } from 'assets/constants';
-
+import 'dotenv/config';
 
 const logger = new Logger("main.ts");
 
@@ -19,12 +18,12 @@ async function bootstrap() {
   const port = 4000;
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    "origin": AppConfig.allowOrigin,
+    "origin": process.env.allowOrigin?.replaceAll('[',"").replaceAll(']',"").replaceAll(/\s+/g,"").split(","),
     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
     "preflightContinue": false,
     "optionsSuccessStatus": 204
   });
-
+  
   app.use(helmet());
   app.use(
     session({

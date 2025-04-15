@@ -2,6 +2,7 @@ import { Controller, Body, Post, HttpCode, HttpStatus, BadRequestException, Forb
 import { UserService } from './user.service';
 import { SecurityService } from '../security/security.service';
 import { AllowAnonymous } from '../auth/auth.guard';
+import { User } from './user'
 
 @Controller('user')
 export class UserController {

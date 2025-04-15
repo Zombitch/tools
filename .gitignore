@@ -6,6 +6,8 @@
 ./front/dist
 ./front/node_modules
 
+**.env
+
 # Logs
 ./back/logs
 ./back/*.log

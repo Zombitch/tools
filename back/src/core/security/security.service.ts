@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { createCipheriv, createDecipheriv, randomBytes, scrypt } from 'crypto';
 import * as bcrypt from 'bcrypt';
-import { AppConfig } from 'assets/constants';
 import { promisify } from 'util';
 
 @Injectable()
 export class SecurityService {
      private readonly iv: Buffer = randomBytes(16);
-     private key: Buffer = null;
+     private key: Buffer | null = null;
 
     /**
      * Encrypt a string
@@ -16,7 +15,7 @@ export class SecurityService {
      * @returns Promise with buffer (encrypted data) as parameter
      */
     async encrypt(text: string): Promise<Buffer>{
-        if(!this.key) this.key = (await promisify(scrypt)(AppConfig.cryptKey, 'salt', 32)) as Buffer;
+        if(!this.key) this.key = (await promisify(scrypt)(process.env.cryptKey ?? "", 'salt', 32)) as Buffer;
 
         const cipher = createCipheriv('aes-256-ctr', this.key, this.iv);
         
@@ -34,7 +33,7 @@ export class SecurityService {
      * @returns Buffer decrypted password
      */
     async decrypt(encryptedText: Buffer): Promise<Buffer>{
-        if(!this.key) this.key = (await promisify(scrypt)(AppConfig.cryptKey, 'salt', 32)) as Buffer;
+        if(!this.key) this.key = (await promisify(scrypt)(process.env.cryptKey ?? "", 'salt', 32)) as Buffer;
         const decipher = createDecipheriv('aes-256-ctr', this.key, this.iv);
         return Buffer.concat([
             decipher.update(encryptedText),
@@ -59,8 +58,8 @@ export class SecurityService {
      * @param hash 
      * @returns 
      */
-    isTextEqualToHash(text: string, hash: string): Promise<boolean>{
-        return text && hash && bcrypt.compare(text.toString(), hash.toString());
+    isTextEqualToHash(text: string, hash: string | undefined): Promise<boolean> | string | undefined {
+        return text && hash && bcrypt.compare(text?.toString(), hash?.toString());
     }
 
     b64Encode(value: string, loop: number = 1): string{

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DataService } from '../abstract/data.service';
+import { User } from './user'
 
 @Injectable()
 export class UserService extends DataService{

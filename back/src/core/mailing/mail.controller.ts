@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { AllowAnonymous } from '../../auth/auth.guard';
+import { AllowAnonymous } from '../auth/auth.guard';
 import { MailService } from './mail.service';
 import { htmlToText } from 'html-to-text';
 
@@ -16,7 +16,7 @@ export class MailController {
             const result = await this.mailService.sendMail(body.from, body.to, body.subject, htmlToText(body.html), body.html);
             return result;
         }else{
-            throw new BadRequestException()
+            throw new BadRequestException("Missing parameter");
         }
     }
 }

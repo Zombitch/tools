@@ -1,4 +1,4 @@
-interface DataElement{
+export interface DataElement{
     id?: number;
     additionalProperties?: {};
 }

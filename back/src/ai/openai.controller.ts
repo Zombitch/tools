@@ -2,7 +2,6 @@ import { Controller, HttpCode, HttpStatus, Get, Req, Param, Session } from '@nes
 import { AuthService } from 'src/core/auth/auth.service';
 import { AllowAnonymous } from '../core/auth/auth.guard';
 import { OpenAI } from "openai";
-import { AppConfig } from '../../assets/constants';
 import { Thread } from 'openai/resources/beta/threads/threads';
 import { MessageCreateParams, Message, MessagesPage } from 'openai/resources/beta/threads/messages';
 
@@ -13,7 +12,7 @@ export class OpenAIController {
     protected assistantID: string = "asst_1J56WUefvtFnveifVFSzTDOy";
 
     constructor(private authService: AuthService) {
-        this.key = AppConfig.openaiApiKey;
+        this.key = process.env.openaiApiKey ?? "";
         this.openAI = new OpenAI({apiKey: this.key});
     }
 
@@ -54,7 +53,7 @@ export class OpenAIController {
     }
 
     protected async waitForComplete(threadID: string, runID: string){
-        await new Promise(resolve => setTimeout(resolve, AppConfig.openaiCheckInterval));
+        await new Promise(resolve => setTimeout(resolve, (process.env.openaiCheckInterval as unknown as number)));
         const run = await this.openAI.beta.threads.runs.retrieve(threadID, runID);
 
         if(['QUEUED', 'IN_PROGRESS'].includes(run.status.toUpperCase())){

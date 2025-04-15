@@ -1,20 +1,20 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { UsersModule } from '../user/user.module';
+import { UserModule } from '../user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { SystemService } from '../system/system.service';
 import { SecurityService } from '../security/security.service';
-import { AppConfig } from '../../../assets/constants';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth.guard';
+import 'dotenv/config';
 
 @Module({
   imports: [
-    UsersModule,
+    UserModule,
     JwtModule.register({
       global: true,
-      secret: AppConfig.jwtSecret,
+      secret: process.env.jwtSecret,
       signOptions: { expiresIn: '60s' },
     }),
   ],

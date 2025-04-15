@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { SystemService } from '../system/system.service';
+import 'dotenv/config';
 
 @Module({
   providers: [
@@ -9,4 +10,4 @@ import { SystemService } from '../system/system.service';
   ],
   exports: [UserService]
 })
-export class UsersModule {}
+export class UserModule {}

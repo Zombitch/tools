@@ -6,7 +6,6 @@ import {
     UnauthorizedException,
   } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AppConfig } from '../../../assets/constants';
 import { Request } from 'express';
 import { SetMetadata } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
@@ -33,8 +32,8 @@ import { SecurityService } from '../security/security.service';
       }
 
       try {
-        const decodedToken = this.securityService.b64Decode(token, AppConfig.encodingLoop);
-        const payload = await this.jwtService.verifyAsync(decodedToken, { secret: AppConfig.jwtSecret, });
+        const decodedToken = this.securityService.b64Decode(token, (process.env.encodingLoop as unknown as number));
+        const payload = await this.jwtService.verifyAsync(decodedToken, { secret: process.env.jwtSecret, });
         request['user'] = payload;
       } catch {
         throw new UnauthorizedException();
