@@ -28,7 +28,7 @@ import { SecurityService } from '../security/security.service';
       }
 
       if (!token) {
-        throw new UnauthorizedException();
+        throw new UnauthorizedException("No token provided");
       }
 
       try {
@@ -36,7 +36,7 @@ import { SecurityService } from '../security/security.service';
         const payload = await this.jwtService.verifyAsync(decodedToken, { secret: process.env.jwtSecret, });
         request['user'] = payload;
       } catch {
-        throw new UnauthorizedException();
+        throw new UnauthorizedException("Error decoding token");
       }
       return true;
     }

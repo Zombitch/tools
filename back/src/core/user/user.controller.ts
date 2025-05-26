@@ -22,9 +22,9 @@ export class UserController {
             email: body?.email?.toString()
         }
 
-        const usernameDoesExist = await this.userService.findOneBy(body.username, "username");
+        const usernameDoesExist = await this.userService.findOneByUsername(body.username);
         if(usernameDoesExist) throw new ForbiddenException("Error while trying to create the account.");
         
-        this.userService.insert(user, true);
+        this.userService.insert(user);
     }
 }

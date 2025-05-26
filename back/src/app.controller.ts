@@ -13,7 +13,7 @@ export class AppController implements OnModuleInit{
   }
 
   onModuleInit() {
-    this.usersService.load();
+    
   }
 
   @Get()

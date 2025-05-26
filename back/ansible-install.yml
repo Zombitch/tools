@@ -46,6 +46,7 @@
         RUN echo "smtpUser={{ smtpUser }}" >> .env
         RUN echo "smtpPwd={{ smtpPassword }}" >> .env
         RUN echo "allowOrigin={{ allowOrigin }}" >> .env
+        RUN echo "mongoURI={{ mongoURI }}" >> .env
         RUN npm install -g @nestjs/cli
         RUN npm i
         EXPOSE 4000

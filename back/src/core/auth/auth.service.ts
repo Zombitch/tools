@@ -14,13 +14,12 @@ export class AuthService {
     async login(username: string | undefined, password: string | undefined){
         if(!username || !password) throw new BadRequestException("Missing parameters");
 
-        const user = await this.userService.findOneBy(username, "username");
+        const user = await this.userService.findOneByUsername(username);
         const isPasswordCorrect = await this.securityService.isTextEqualToHash(password, user?.password);
-
+        
         if (!isPasswordCorrect) throw new UnauthorizedException();
 
         const payload = { 
-            userId: user?.id, 
             username: user?.username,
             date: new Date()
         };

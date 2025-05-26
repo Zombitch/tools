@@ -1,7 +1,17 @@
-import { DataElement } from "../abstract/data-element";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Document } from 'mongoose';
 
-export interface User extends DataElement{
-    username?: string;
-    password?: string;
-    email?: string;
+@Schema({ timestamps: true })
+export class User {
+  @Prop({ required: true, unique: true })
+  username: string;
+
+  @Prop({ required: true })
+  password: string;
+
+  @Prop({ required: false })
+  email: string;
 }
+
+export type UserDocument = User & Document;
+export const UserSchema = SchemaFactory.createForClass(User);

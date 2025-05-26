@@ -10,6 +10,7 @@ export class SystemService {
     constructor() {}
 
     static getAppPath(): string{
+        console.log(join(__dirname, '..', '..', '..'));
         return join(__dirname, '..', '..', '..');
     }
 }

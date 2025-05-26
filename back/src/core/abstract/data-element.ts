@@ -1,4 +1,4 @@
-export interface DataElement{
+export class DataElement{
     id?: number;
     additionalProperties?: {};
 }
